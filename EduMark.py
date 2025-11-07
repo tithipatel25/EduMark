@@ -15,3 +15,18 @@ import os
 import sys
 
 my_filetypes = [('Text File', '*.txt'), ('All Files', '*.*')]
+
+student1 = []
+file1=[]
+
+class App(Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("EduMark - Educational Marks Manager")
+        self.screenwidth = 925
+        self.screenheight = 500
+        self.screenx = 300
+        self.screeny = 100
+        self.geometry(f"{self.screenwidth}x{self.screenheight}+{self.screenx}+{self.screeny}")
+        self.resizable(False, False)
+
