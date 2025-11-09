@@ -30,3 +30,5 @@ class App(Tk):
         self.geometry(f"{self.screenwidth}x{self.screenheight}+{self.screenx}+{self.screeny}")
         self.resizable(False, False)
 
+        
+
