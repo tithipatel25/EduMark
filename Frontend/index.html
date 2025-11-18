@@ -12,6 +12,23 @@
     <h1>EduMark Dashboard</h1>
     <p>Welcome to the EduMark platform. Here you can manage your educational content and track student progress.</p>
 
+    <h2>Add Student Marks</h2>
+    <form id="marksForm">
+        <label for="studentName">Student Name</label>
+        <input type="text" id="name" name="studentName" required>
+
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required>
+
+        <label for="marks">Marks</label>
+        <input type="number" id="marks" name="marks" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Responses</h2>
+    <pre id="Responses"></pre>
+
     <script src="app.js"></script>
 
 </body>
