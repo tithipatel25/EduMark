@@ -3,21 +3,23 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-class Student(BaseModel):
-    name: str # Student's name (string)
-    subject: str # Subject name (string)
-    marks: float # Marks obtained (float number)
+class AssessmentInput(BaseModel):
+    stu_name: str # Student's name (string)
+    course: str # Subject name (string)
+    scores: float # Marks obtained (float number)
 
 
 #Testing
 @app.get("/")
 def home():
-    return {"message": "Welcome to the Student Marks API"}
-
+    return {"message": "Welcome to EduMark API"}
 
 students_db = [] #temporary list acting like a database
 
-@app.post("/add_mark/") #frontend will send data to this endpoint
-def add_mark(student: Student): #FastAPI will automatically read the incoming JSON to Student model
-    students_db.append(student)
-    return {"message": "Student marks added successfully", "data": student}
+@app.post("/assessments/") #frontend will send data to this endpoint
+def add_assessment(assessment: AssessmentInput):
+    students_db.append(assessment)
+    return {
+        "message": "Assessment added successfully", 
+        "data": assessment
+    }
