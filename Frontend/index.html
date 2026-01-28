@@ -3,33 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduMark</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>EduMark - Teacher Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #5dade2 0%, #48c9b0 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #7f8c8d;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #3498db;
+        }
+
+        .nav-link.active {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 4px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-green {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-green:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-blue {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-blue:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-teal {
+            background: #48c9b0;
+            color: white;
+        }
+
+        .btn-teal:hover {
+            background: #3fb89f;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            background: #f8f9fa;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .welcome-section h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 16px;
+            background: #48c9b0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #3fb89f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(72, 201, 176, 0.3);
+        }
+
+        /* Assessments Section */
+        .assessments-section h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart {
+            flex: 1;
+        }
+
+        .chart-title {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 150px;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, #3498db, #5dade2);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+            transform: translateY(-5px);
+        }
+
+        .bar:nth-child(2) { background: linear-gradient(to top, #95a5a6, #bdc3c7); }
+        .bar:nth-child(3) { background: linear-gradient(to top, #95a5a6, #bdc3c7); }
+        .bar:nth-child(4) { background: linear-gradient(to top, #48c9b0, #6dd5c3); }
+        .bar:nth-child(5) { background: linear-gradient(to top, #3498db, #5dade2); }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        /* Quick Actions */
+        .quick-actions h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 15px;
+            background: white;
+            border: 2px solid #e8ecf1;
+            border-radius: 8px;
+            color: #5d6d7e;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            border-color: #3498db;
+            color: #3498db;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px 40px;
+            background: white;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* File input styling */
+        input[type="file"] {
+            display: none;
+        }
+
+        @media (max-width: 968px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">📚</div>
+                <span>EduMark</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active">Assessments</a>
+                <a href="#" class="nav-link">Grades</a>
+                <a href="#" class="nav-link">Students</a>
+                <button class="btn btn-green">Know More</button>
+                <button class="btn btn-teal">Contact Us</button>
+                <button class="btn btn-blue">Login</button>
+            </nav>
+        </div>
 
-    <h1>EduMark Dashboard</h1>
-    <p>Welcome to the EduMark! Here you can manage your educational content and track your student's progress.</p>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="dashboard-grid">
+                <!-- Welcome Section -->
+                <div class="card welcome-section">
+                    <h1>Welcome, Teachers!</h1>
+                    <p>Track student progress with ease.</p>
+                    <input type="file" id="fileInput" accept=".txt">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        Upload Student Data (.txt)
+                    </button>
+                </div>
 
-    <h2>Add Student Marks</h2>
-    <form id="marksForm">
-        <label for="studentName">Student Name</label>
-        <input type="text" id="name" name="studentName" required>
+                <!-- Assessments Section -->
+                <div class="card assessments-section">
+                    <h2>Upcoming Assessments</h2>
+                    <div class="section-title">Upcoming Assessments</div>
+                    
+                    <div class="chart-container">
+                        <div class="chart">
+                            <div class="chart-title">Fastest to poorest</div>
+                            <div class="bars">
+                                <div class="bar" style="height: 85%;">
+                                    <div class="bar-label">A</div>
+                                </div>
+                                <div class="bar" style="height: 35%;">
+                                    <div class="bar-label">B</div>
+                                </div>
+                                <div class="bar" style="height: 25%;">
+                                    <div class="bar-label">C</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart">
+                            <div class="chart-title">Recent Grades</div>
+                            <div class="bars">
+                                <div class="bar" style="height: 45%;">
+                                    <div class="bar-label">D</div>
+                                </div>
+                                <div class="bar" style="height: 65%;">
+                                    <div class="bar-label">E</div>
+                                </div>
+                                <div class="bar" style="height: 95%;">
+                                    <div class="bar-label">Doing well</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" name="subject" required>
+                <!-- Quick Actions -->
+                <div class="card quick-actions">
+                    <h2>Quick Actions</h2>
+                    <button class="action-btn" onclick="alert('Create New Assessment clicked!')">
+                        Create New Assessment
+                    </button>
+                    <button class="action-btn" onclick="alert('View Reports clicked!')">
+                        View Reports
+                    </button>
+                    <button class="action-btn" onclick="alert('Message Students clicked!')">
+                        Message Students
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        <label for="marks">Marks</label>
-        <input type="number" id="marks" name="marks" required>
+        <!-- Footer -->
+        <div class="footer">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+    </div>
 
-        <button type="submit">Submit</button>
-    </form>
+    <script>
+        // File upload handler
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.name.endsWith('.txt')) {
+                    alert(`File "${file.name}" uploaded successfully!`);
+                    // Here you would typically process the file
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        console.log('File content:', event.target.result);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert('Please upload a .txt file');
+                    e.target.value = '';
+                }
+            }
+        });
 
-    <h2>Responses</h2>
-    <pre id="Responses"></pre>
-
-    <script src="app.js"></script>
-
+        // Add smooth animations on load
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
 </body>
 </html>
