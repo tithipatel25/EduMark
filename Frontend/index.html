@@ -385,37 +385,38 @@
     </div>
 
     <script>
-        // File upload handler
-        document.getElementById('fileInput').addEventListener('change', function(e) {
+        document.getElementById('fileInput').addEventListener('change', async function(e) {
             const file = e.target.files[0];
-            if (file) {
-                if (file.name.endsWith('.txt')) {
-                    alert(`File "${file.name}" uploaded successfully!`);
-                    // Here you would typically process the file
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        console.log('File content:', event.target.result);
-                    };
-                    reader.readAsText(file);
-                } else {
-                    alert('Please upload a .txt file');
-                    e.target.value = '';
-                }
+            if (!file) return;
+        
+            if (!file.name.endsWith('.txt')) {
+                alert('Please upload a .txt file');
+                return;
             }
-        });
-
-        // Add smooth animations on load
-        window.addEventListener('load', function() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.5s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
+        
+            const formData = new FormData();
+            formData.append("file", file);
+        
+            try {
+                const res = await fetch("http://127.0.0.1:8000/api/upload", {
+                    method: "POST",
+                    body: formData
+                });
+        
+                const data = await res.json();
+        
+                if (!res.ok) {
+                    alert(data.detail || "Upload failed");
+                    return;
+                }
+        
+                alert(`Uploaded successfully! ${data.students_count} students added.`);
+                console.log(data);
+        
+            } catch (err) {
+                console.error(err);
+                alert("Backend not reachable");
+            }
         });
     </script>
 </body>
