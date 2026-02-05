@@ -1,7 +1,13 @@
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import MongoClient #allows you to connect with the database
+import os
+from dotenv import load_dotenv #load varibles from .env file 
 
-MONGO_DETAILS = "mongodb://localhost:27017" 
+load_dotenv() #load the .env file
 
-client = AsyncIOMotorClient(MONGO_DETAILS)
+MONGO_URL = os.getenv("MONGO_URL") 
+
+client = MongoClient(MONGO_URL)
 db = client.edumark #database name
-assessments_collection = db.get_collection("assessments") #collection for storing assessment data
+
+classes_collection = db.classes
+
