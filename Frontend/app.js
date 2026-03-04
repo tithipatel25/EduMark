@@ -1,3 +1,13 @@
+// Toast Function
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+
+
 // Elements
 const fileInput = document.getElementById('fileInput');
 const uploadBtn = document.getElementById('uploadBtn');
@@ -19,7 +29,7 @@ fileInput.addEventListener('change', async (e) => {
     if (!file) return;
 
     if (!file.name.endsWith('.txt')) {
-        alert('Please upload a .txt file');
+        showToast('Please upload a .txt file');
         e.target.value = '';
         return;
     }
@@ -36,11 +46,11 @@ fileInput.addEventListener('change', async (e) => {
         const data = await res.json();
 
         if (!res.ok) {
-            alert(data.detail || "Upload failed");
+            showToast(data.detail || "Upload failed");
             return;
         }
 
-        alert(`Uploaded successfully! ${data.students_count} students added.`);
+        showToast(`Uploaded successfully! ${data.students_count} students added.`);
         console.log(data);
 
         // Hide middle section
@@ -51,7 +61,7 @@ fileInput.addEventListener('change', async (e) => {
 
     } catch (err) {
         console.error(err);
-        alert("Backend not reachable");
+        showToast("Backend not reachable");
     }
 });
 
@@ -119,17 +129,17 @@ async function fetchStudentsAndRenderTable() {
 // Quick Action Buttons
 
 createAssessmentBtn.addEventListener('click', () => {
-    alert('Create New Assessment clicked!');
+    showToast('Create New Assessment clicked!');
     // Add your functionality here
 });
 
 viewReportsBtn.addEventListener('click', () => {
-    alert('View Reports clicked!');
+    showToast('View Reports clicked!');
     // Add your functionality here
 });
 
 messageStudentsBtn.addEventListener('click', () => {
-    alert('Stay tuned!');
+    showToast('Stay tuned!');
     // Add your functionality here
 });
 
