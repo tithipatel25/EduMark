@@ -1,34 +1,26 @@
 def parse_txt(text: str):
-    students = []
-    blocks = text.split('---')
+    lines = text.splitlines() #splits the text into lines
 
-    for block in blocks:
-        lines = block.strip().split('\n')
-        if not lines or lines == ['']:
+    students = [] #initializes an empty list to store student data
+
+    for line in lines:
+        line = line.strip() #removes leading and trailing whitespace
+
+        if not line:
             continue
 
-        student = {
+        parts = line.split(",") #splits the line into parts using comma as a delimiter
+
+        if len(parts) != 3:
+            continue
+
+        first, last, student_id = parts
+
+        students.append({
+            "first_name": first.strip(),
+            "last_name": last.strip(),
+            "student_id": student_id.strip(),
             "assignments": {}
-        }
-
-        for line in lines:
-            if ':' not in line:
-                continue
-
-            key, value = line.split(':', 1) #splits line into 2 parts. Key is assigned everything before the first colon, value is assigned everything after the first colon
-            key, value = key.strip(), value.strip()
-
-            if key.lower() == "id":
-                student["student_id"] = value 
-            elif key.lower() == "name":
-                student["full_name"] = value
-            else:
-                try:
-                    student['assignments'][key] = int(value)
-                except:
-                    student['assignments'][key] = value
-
-        if "student_id" in student:
-            students.append(student)
+        })
 
     return students

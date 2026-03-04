@@ -5,4 +5,5 @@ router = APIRouter()
 
 @router.get("/students")
 def get_students():
-    return list(students_collection.find({}, {"_id":0})) #returns all student documents excluding the MongoDB-generated _id field
+    students = list(students_collection.find({}, {"_id": 0})) # Retrieves all student records from the MongoDB collection, excluding the "_id" field
+    return students

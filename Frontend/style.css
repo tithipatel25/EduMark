@@ -273,6 +273,31 @@ input[type="file"] {
     display: none;
 }
 
+
+
+
+/* Scrolling bars fot after middlesection disappears */
+.table-wrapper {
+    max-width: 400px; /* Verticle scroll height */
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ccc;
+}
+
+.table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Horizontal scroll width (if needed) */
+}
+
+.table-wrapper th, .table-wrapper td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+
+
 @media (max-width: 968px) {
     .dashboard-grid {
         grid-template-columns: 1fr;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduMark - Teacher Dashboard</title>
+    
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
 </head>
@@ -28,18 +29,19 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="dashboard-grid">
-                <!-- Welcome Section -->
+                
+                <!-- Welcome / Upload Section -->
                 <div class="card welcome-section">
                     <h1>Welcome, Teachers!</h1>
                     <p>Track student progress with ease.</p>
-                    <input type="file" id="fileInput" accept=".txt">
-                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    <input type="file" id="fileInput" accept=".txt" style="display:none;">
+                    <button class="upload-btn" id="uploadBtn">
                         Upload Student Data (.txt)
                     </button>
                 </div>
 
-                <!-- Assessments Section -->
-                <div class="card assessments-section">
+                <!-- Middle Section (charts, disappears after upload) -->
+                <div class="card assessments-section" id="middleSection">
                     <h2>Upcoming Assessments</h2>
                     <div class="section-title">Upcoming Assessments</div>
                     
@@ -75,18 +77,15 @@
                     </div>
                 </div>
 
+                <!-- Students Table (hidden initially) -->
+                <div id="studentsTable" style="display: none;"></div>
+
                 <!-- Quick Actions -->
                 <div class="card quick-actions">
                     <h2>Quick Actions</h2>
-                    <button class="action-btn" onclick="alert('Create New Assessment clicked!')">
-                        Create New Assessment
-                    </button>
-                    <button class="action-btn" onclick="alert('View Reports clicked!')">
-                        View Reports
-                    </button>
-                    <button class="action-btn" onclick="alert('Message Students clicked!')">
-                        Email Students
-                    </button>
+                    <button class="action-btn" id="createAssessmentBtn">Create New Assessment</button>
+                    <button class="action-btn" id="viewReportsBtn">View Reports</button>
+                    <button class="action-btn" id="messageStudentsBtn">Email Students</button>
                 </div>
             </div>
         </div>
@@ -97,41 +96,5 @@
             <a href="#">Terms of Service</a>
         </div>
     </div>
-
-    <script>
-        document.getElementById('fileInput').addEventListener('change', async function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-        
-            if (!file.name.endsWith('.txt')) {
-                alert('Please upload a .txt file');
-                return;
-            }
-        
-            const formData = new FormData();
-            formData.append("file", file);
-        
-            try {
-                const res = await fetch("http://127.0.0.1:8000/api/upload", {
-                    method: "POST",
-                    body: formData
-                });
-        
-                const data = await res.json();
-        
-                if (!res.ok) {
-                    alert(data.detail || "Upload failed");
-                    return;
-                }
-        
-                alert(`Uploaded successfully! ${data.students_count} students added.`);
-                console.log(data);
-        
-            } catch (err) {
-                console.error(err);
-                alert("Backend not reachable");
-            }
-        });
-    </script>
 </body>
 </html>
