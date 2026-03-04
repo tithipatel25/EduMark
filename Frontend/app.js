@@ -65,48 +65,47 @@ async function fetchStudentsAndRenderTable() {
 
         if (!students || students.length === 0) {
             studentsTableDiv.innerHTML = `
-            <div class="table-wrapper">
-                <table border="1" cellpadding="8" cellspacing="0">
-                    <tr>
-                        <th>Full Name</th>
-                        <th>Student ID</th>
-                        <th>Add Assignment</th>
-                    </tr>
-                    ${students.map(s => `
-                        <tr>
-                            <td>${s.first_name} ${s.last_name}</td>
-                            <td>${s.student_number}</td>
-                            <td><button>Add</button></td>
-                        </tr>
-                    `).join('')}
-                </table>
-            </div>
-        `;
-        studentsTableDiv.style.display = "block";
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Student ID</th>
+                                <th>Add Assignment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="3">No students found.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            studentsTableDiv.style.display = "block";
             return;
         }
 
-        let html = `
-            <table border="1" cellpadding="8" cellspacing="0">
-                <tr>
-                    <th>Full Name</th>
-                    <th>Student ID</th>
-                    <th>Add Assignment</th>
-                </tr>
+        studentsTableDiv.innerHTML = `
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Student ID</th>
+                            <th>Add Assignment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${students.map(s => `
+                            <tr>
+                                <td>${s.first_name} ${s.last_name}</td>
+                                <td>${s.student_id}</td>
+                                <td><button>Add</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
         `;
-
-        students.forEach(s => {
-            html += `
-                <tr>
-                    <td>${s.first_name} ${s.last_name}</td>
-                    <td>${s.student_id}</td>
-                    <td><button>Add</button></td>
-                </tr>
-            `;
-        });
-
-        html += `</table>`;
-        studentsTableDiv.innerHTML = html;
         studentsTableDiv.style.display = "block";
 
     } catch (err) {
