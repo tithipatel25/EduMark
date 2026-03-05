@@ -32,7 +32,7 @@
                 
                 <!-- Welcome / Upload Section -->
                 <div class="card welcome-section">
-                    <h1>Welcome, Teachers!</h1>
+                    <h1>Welcome to EduMark!</h1>
                     <p>Track student progress with ease.</p>
                     <input type="file" id="fileInput" accept=".txt" style="display:none;">
                     <button class="upload-btn" id="uploadBtn">
@@ -103,7 +103,7 @@
     <div class="toast" id="toast"></div>
 
     <!-- Assignment Modal -->
-    <div id="assignmentModle" class="modal" style="display:none;">
+    <div id="assignmentModal" class="modal" style="display:none;">
         <div class="modal-content">
 
             <h2>Create Assignment</h2>
@@ -114,9 +114,9 @@
             <h3>Student Marks</h3>
             <div id="marksContainer"></div>
 
-            <div style="margin-top:20px;">
-                <button id="saveAssignmentBtn">Save Assignment</button>
-                <button id="closeAssignmentModle">Cancel</button>
+            <div class="modal-buttons">
+                <button id="saveAssignmentBtn" class="btn-save">Save Assignment</button>
+                <button id="closeAssignmentModal" class="btn-cancel">Cancel</button>
             </div>
 
         </div>

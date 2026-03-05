@@ -6,6 +6,26 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+function openAssignmentModal() {
+    const students = window.currentStudents || [];
+
+    marksContainer.innerHTML = students.map(s => `
+        <div class="marks-row">
+            <span>${s.first_name} ${s.last_name}</span>
+            <input 
+                type="number" 
+                data-id="${s.student_id}" 
+                placeholder="—"
+                min="0"
+                max="100"
+            >
+        </div>
+    `).join('');
+
+    assignmentNameInput.value = '';
+    assignmentModal.style.display = 'flex';
+}
+
 
 
 // Elements
@@ -67,7 +87,7 @@ fileInput.addEventListener('change', async (e) => {
 
 
 // Fetch students and render table
-
+// This is where you can update all the changes to the table in the middle section
 async function fetchStudentsAndRenderTable() {
     const studentsTableCard = document.getElementById('studentsTableCard'); // add this line
 
@@ -96,7 +116,7 @@ async function fetchStudentsAndRenderTable() {
             return;
         }
 
-        studentsTableDiv.innerHTML = `
+            studentsTableDiv.innerHTML = `
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -111,14 +131,22 @@ async function fetchStudentsAndRenderTable() {
                             <tr>
                                 <td>${s.first_name} ${s.last_name}</td>
                                 <td>${s.student_id}</td>
-                                <td><button>Add</button></td>
+                                <td><button class="open-modal-btn">Add</button></td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             </div>
         `;
-        studentsTableCard.style.display = "block"; // changed
+        studentsTableCard.style.display = "block";
+
+        // Store students globally for modal
+        window.currentStudents = students;
+
+        // Wire up Add buttons
+        document.querySelectorAll('.open-modal-btn').forEach(btn => {
+            btn.addEventListener('click', () => openAssignmentModal());
+        });
 
     } catch (err) {
         console.error("Failed to fetch students:", err);
@@ -131,8 +159,11 @@ async function fetchStudentsAndRenderTable() {
 // Quick Action Buttons
 
 createAssessmentBtn.addEventListener('click', () => {
-    showToast('Create New Assessment clicked!');
-    // Add your functionality here
+    if (!window.currentStudents) {
+        showToast('Please upload student data first!');
+        return;
+    }
+    openAssignmentModal();
 });
 
 viewReportsBtn.addEventListener('click', () => {
@@ -182,7 +213,7 @@ navLinks.forEach(link => {
 
 
 
-const assignmentModal = document.getElementById("assignmentModle");
+const assignmentModal = document.getElementById("assignmentModal");
 const assignmentNameInput = document.getElementById("assignmentName");
 const marksContainer = document.getElementById("marksContainer");
 const saveAssignmentBtn = document.getElementById("saveAssignmentBtn");
@@ -194,7 +225,7 @@ if (saveAssignmentBtn) {
         const name = assignmentNameInput.value.trim();
 
         if (!name) {
-            alert("Assignment name required");
+            showToast("Assignment name required");
             return;
         }
 
@@ -224,7 +255,7 @@ if (saveAssignmentBtn) {
             });
 
             if (!res.ok) {
-                alert("Failed to save assignment");
+                showToast("Failed to save assignment");
                 return;
             }
 
@@ -234,9 +265,14 @@ if (saveAssignmentBtn) {
 
         } catch (err) {
             console.error(err);
-            alert("Server error");
+            showToast("Server error");
         }
 
     });
 
 }
+
+
+document.getElementById("closeAssignmentModal").addEventListener("click", () => {
+    assignmentModal.style.display = "none";
+});

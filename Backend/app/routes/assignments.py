@@ -3,7 +3,7 @@ from ..database import students_collection
 
 router = APIRouter()
 
-@router.post("/assignments")
+@router.post("/add-assignment")
 
 async def add_assignment(data: dict): #async allows to database queries efficiently without blocking the server
     name = data["assignment_name"]
