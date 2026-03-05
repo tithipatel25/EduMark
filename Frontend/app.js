@@ -69,6 +69,8 @@ fileInput.addEventListener('change', async (e) => {
 // Fetch students and render table
 
 async function fetchStudentsAndRenderTable() {
+    const studentsTableCard = document.getElementById('studentsTableCard'); // add this line
+
     try {
         const res = await fetch("http://127.0.0.1:8000/api/students");
         const students = await res.json();
@@ -90,7 +92,7 @@ async function fetchStudentsAndRenderTable() {
                     </table>
                 </div>
             `;
-            studentsTableDiv.style.display = "block";
+            studentsTableCard.style.display = "block"; // changed
             return;
         }
 
@@ -116,12 +118,12 @@ async function fetchStudentsAndRenderTable() {
                 </table>
             </div>
         `;
-        studentsTableDiv.style.display = "block";
+        studentsTableCard.style.display = "block"; // changed
 
     } catch (err) {
         console.error("Failed to fetch students:", err);
         studentsTableDiv.innerHTML = "<p>Error fetching students.</p>";
-        studentsTableDiv.style.display = "block";
+        studentsTableCard.style.display = "block"; // changed
     }
 }
 
@@ -171,3 +173,70 @@ navLinks.forEach(link => {
         console.log('Navigated to:', link.textContent);
     });
 });
+
+
+
+
+
+
+
+
+
+const assignmentModal = document.getElementById("assignmentModle");
+const assignmentNameInput = document.getElementById("assignmentName");
+const marksContainer = document.getElementById("marksContainer");
+const saveAssignmentBtn = document.getElementById("saveAssignmentBtn");
+
+if (saveAssignmentBtn) {
+
+    saveAssignmentBtn.addEventListener("click", async () => {
+
+        const name = assignmentNameInput.value.trim();
+
+        if (!name) {
+            alert("Assignment name required");
+            return;
+        }
+
+        const inputs = marksContainer.querySelectorAll("input");
+        const marksObject = {};
+
+        inputs.forEach(input => {
+
+            const studentId = input.dataset.id;
+            const value = input.value;
+
+            marksObject[studentId] = value ? Number(value) : null;
+
+        });
+
+        try {
+
+            const res = await fetch("http://127.0.0.1:8000/api/add-assignment", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    assignment_name: name,
+                    marks: marksObject
+                })
+            });
+
+            if (!res.ok) {
+                alert("Failed to save assignment");
+                return;
+            }
+
+            assignmentModal.style.display = "none";
+
+            fetchStudentsAndRenderTable();
+
+        } catch (err) {
+            console.error(err);
+            alert("Server error");
+        }
+
+    });
+
+}

@@ -78,7 +78,11 @@
                 </div>
 
                 <!-- Students Table (hidden initially) -->
-                <div id="studentsTable" style="display: none;"></div>
+                
+                <div class="card" id="studentsTableCard" style="display:none;">
+                    <div id="studentsTable"></div>
+                </div>
+                
 
                 <!-- Quick Actions -->
                 <div class="card quick-actions">
@@ -97,5 +101,27 @@
         </div>
     </div>
     <div class="toast" id="toast"></div>
+
+    <!-- Assignment Modal -->
+    <div id="assignmentModle" class="modal" style="display:none;">
+        <div class="modal-content">
+
+            <h2>Create Assignment</h2>
+
+            <label>Assignment Name</label>
+            <input type="text" id="assignmentName" placeholder="Enter assignment name">
+
+            <h3>Student Marks</h3>
+            <div id="marksContainer"></div>
+
+            <div style="margin-top:20px;">
+                <button id="saveAssignmentBtn">Save Assignment</button>
+                <button id="closeAssignmentModle">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+
+
 </body>
 </html>
