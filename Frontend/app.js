@@ -89,7 +89,7 @@ fileInput.addEventListener('change', async (e) => {
 // Fetch students and render table
 // This is where you can update all the changes to the table in the middle section
 async function fetchStudentsAndRenderTable() {
-    const studentsTableCard = document.getElementById('studentsTableCard'); // add this line
+    const studentsTableCard = document.getElementById('studentsTableCard');
 
     try {
         const res = await fetch("http://127.0.0.1:8000/api/students");
@@ -103,37 +103,63 @@ async function fetchStudentsAndRenderTable() {
                             <tr>
                                 <th>Full Name</th>
                                 <th>Student ID</th>
-                                <th>Add Assignment</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="3">No students found.</td></tr>
+                            <tr><td colspan="2">No students found.</td></tr>
                         </tbody>
                     </table>
                 </div>
             `;
-            studentsTableCard.style.display = "block"; // changed
+            studentsTableCard.style.display = "block";
             return;
         }
 
-            studentsTableDiv.innerHTML = `
+        // Collect all unique assignment names across all students
+        const assignmentNames = [];
+        students.forEach(s => {
+            if (s.assignments) {
+                Object.keys(s.assignments).forEach(name => {
+                    if (!assignmentNames.includes(name)) {
+                        assignmentNames.push(name);
+                    }
+                });
+            }
+        });
+
+        // Build table headers
+        const assignmentHeaders = assignmentNames.map(name => `<th>${name}</th>`).join('');
+
+        // Build table rows
+        const rows = students.map(s => {
+            const assignmentCells = assignmentNames.map(name => {
+                const mark = s.assignments && s.assignments[name] !== undefined
+                    ? s.assignments[name] !== null ? s.assignments[name] : '—'
+                    : '—';
+                return `<td>${mark}</td>`;
+            }).join('');
+
+            return `
+                <tr>
+                    <td>${s.first_name} ${s.last_name}</td>
+                    <td>${s.student_id}</td>
+                    ${assignmentCells}
+                </tr>
+            `;
+        }).join('');
+
+        studentsTableDiv.innerHTML = `
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
                             <th>Full Name</th>
                             <th>Student ID</th>
-                            <th>Add Assignment</th>
+                            ${assignmentHeaders}
                         </tr>
                     </thead>
                     <tbody>
-                        ${students.map(s => `
-                            <tr>
-                                <td>${s.first_name} ${s.last_name}</td>
-                                <td>${s.student_id}</td>
-                                <td><button class="open-modal-btn">Add</button></td>
-                            </tr>
-                        `).join('')}
+                        ${rows}
                     </tbody>
                 </table>
             </div>
@@ -143,15 +169,10 @@ async function fetchStudentsAndRenderTable() {
         // Store students globally for modal
         window.currentStudents = students;
 
-        // Wire up Add buttons
-        document.querySelectorAll('.open-modal-btn').forEach(btn => {
-            btn.addEventListener('click', () => openAssignmentModal());
-        });
-
     } catch (err) {
         console.error("Failed to fetch students:", err);
         studentsTableDiv.innerHTML = "<p>Error fetching students.</p>";
-        studentsTableCard.style.display = "block"; // changed
+        studentsTableCard.style.display = "block";
     }
 }
 

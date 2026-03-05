@@ -407,6 +407,8 @@ input[type="file"] {
 #studentsTableCard {
     opacity: 1 !important;
     transform: none !important;
+    overflow: hidden;
+    padding: 0;
 }
 
 
